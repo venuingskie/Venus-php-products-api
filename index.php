@@ -1,54 +1,35 @@
 const express = require('express');
-const app = express();
-const PORT = 3000;
+const app = express().use(express.json());
 
-app.use(express.json());
-
-// Simulated 'products' table
 let products = [
     { id: 1, product: 'Laptop', price: 999.99 },
     { id: 2, product: 'Mouse', price: 25.50 }
 ];
 
-// 1. GET all products
-app.get('/api/products', (req, res) => {
-    res.status(200).json(products);
-});
+// Routes
+app.get('/api/products', (req, res) => res.json(products));
 
-// 2. GET product by ID
 app.get('/api/products/:id', (req, res) => {
-    const item = products.find(p => p.id === parseInt(req.params.id));
-    if (!item) return res.status(404).send('Product not found');
-    res.json(item);
+    const item = products.find(p => p.id == req.params.id);
+    item ? res.json(item) : res.status(404).send('Not found');
 });
 
-// 3. POST new product
 app.post('/api/products', (req, res) => {
-    const newProduct = {
-        id: products.length + 1,
-        product: req.body.product,
-        price: req.body.price
-    };
-    products.push(newProduct);
-    res.status(201).json(newProduct);
+    const newP = { id: products.length + 1, ...req.body };
+    products.push(newP);
+    res.status(201).json(newP);
 });
 
-// 4. PUT (Update) product
 app.put('/api/products/:id', (req, res) => {
-    const item = products.find(p => p.id === parseInt(req.params.id));
-    if (!item) return res.status(404).send('Product not found');
-
-    item.product = req.body.product;
-    item.price = req.body.price;
-    res.json(item);
+    const i = products.findIndex(p => p.id == req.params.id);
+    if (i < 0) return res.status(404).send('Not found');
+    products[i] = { id: parseInt(req.params.id), ...req.body };
+    res.json(products[i]);
 });
 
-// 5. DELETE product
 app.delete('/api/products/:id', (req, res) => {
-    products = products.filter(p => p.id !== parseInt(req.params.id));
+    products = products.filter(p => p.id != req.params.id);
     res.status(204).send();
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(3000, () => console.log('Server running on port 3000'));
