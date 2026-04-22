@@ -13,9 +13,9 @@
 ## Response Structure (Example)
 ```json
 {
-  "status": "success",
+  "status": "you have success",
   "item": {
-    "product_id": 101,
+    "product_id": 013,
     "name": "Laptop",
     "price": 999.00
   }
