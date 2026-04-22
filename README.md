@@ -16,7 +16,7 @@
   "status": "success",
   "item": {
     "product_id": 101,
-    "name": "Vening caliguid",
+    "name": "Laptop",
     "price": 999.00
   }
 }
